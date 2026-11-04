@@ -126,6 +126,9 @@ This repository references and adapts ideas/workflows from external projects.
 - What is included:
   - The protocol and implementation in this repository have been adapted for this Skill family and are not represented as an official upstream release.
   - The upstream copyright and complete MIT license text are preserved in the local license copy above.
+- Additional component (`aihot`):
+  - `yichen-unified-search/references/aihot-output-format.md` is copied from the upstream `aihot` Skill's `references/output-format.md` (also distributed by AI HOT, aihot.virxact.com) with only a source note added; it is redistributed under the same MIT License.
+  - `yichen-unified-search/scripts/aihot_search.py` independently implements the public AI HOT API calls and includes no upstream code.
 
 ## 11) joeseesun/yt-search-download
 
@@ -152,27 +155,20 @@ This repository references and adapts ideas/workflows from external projects.
   - Users must identify the runtime's distributor and check its applicable license, service terms, redistribution rights, and version-specific notices before installation or use.
   - This repository's license and this notice are not a license grant for the external CLI.
 
-## 13) Jianying Headless external private core
-
-- Project: https://github.com/mcncarl/jianying-headless (authorized private access required).
-- Skill: `yichen-jianying-edit`; this collection contains only the Skill, its wrappers and speech-plan helpers.
-- The separate core preserves its jy-draftc MIT interface attribution and historical pyJianYingDraft Apache-2.0 relationship. It does not claim clean-room provenance.
-- No Jianying application, official library, native resource package, account data, user media, ASR executor or service credential is distributed here.
-- The Skill and core's original portions use personal-learning and non-commercial terms; upstream MIT / Apache-2.0 licenses remain in effect for their respective portions. This collection's license cannot grant access or rights to the separate private core, proprietary editor, native materials or paid services.
-- Public distribution is limited to this Skill's instructions, entrypoint and speech-plan helpers. The core remains private, and existing collection directories' licenses are unchanged.
-
 ## Notes
 
 - This repository maintains its own license (`LICENSE`) for original contributions. It is personal-learning and non-commercial only.
 - The upstream projects listed above retain their original licenses and copyrights.
 - Upstream licenses and notices should be preserved when redistributing derived works.
-- `yichen-wechat-local-vault` is an independent implementation that adapts specific technical approaches from `wx-favorites-report`. It does not contain any code directly copied from the upstream project.
+- `yichen-wechat-local-vault` adapts Mac technical approaches from `wx-favorites-report` and includes selected MIT-licensed Windows source adaptations from `TANGandXUE/wcdb-key-tool` and `freanocank/wechat-decrypt`. Pinned commits, reviewed source hashes, retained license texts, and the exact adaptation scope are recorded in [Windows acquisition provenance](./yichen-wechat-local-vault/references/windows-live/PROVENANCE.md). Existing snapshot provenance remains in [Windows snapshot provenance](./yichen-wechat-local-vault/references/windows-snapshot/PROVENANCE.md).
 - `yichen-wechat-mp-batch-exporter` references workflows from `wechat-article-exporter` and `wxdown-service`, but does not include their source code, credentials, cached browser data, or downloaded article archives.
 - `yichen-x-article-draft-uploader` references workflow and Markdown parsing ideas from `wshuyi/x-article-publisher-skill`; it stores no real credentials in source control and writes exported X cookies only to a private local file with restricted permissions.
 - The broader skill packaging conventions reference public Claude skill community practices, including JimLiu/baoyu-skills.
 - `yichen-grok-consult` references the public isolation pattern from `sudoHG/codex-grok-search`, but includes an independently implemented MCP server and deterministic verification layer.
 - `yichen-bookmarks-export` calls Field Theory as an optional external runtime; Field Theory remains under its upstream MIT License, while this repository's independently implemented adapter remains under this repository's license.
 - The horizontal-and-vertical research mode in `yichen-web-research` is based on, inspired by, and extends KKKKhazix/khazix-skills `hv-analysis`; the upstream author, pinned commit, and MIT license are preserved above.
+- The AI HOT Chinese briefing format in `yichen-unified-search` is copied from the `aihot` Skill in KKKKhazix/khazix-skills; the MIT license is preserved above.
+- `yichen-content-archive/scripts/wechat_known_url.py` reads public WeChat article pages directly. Its explicit, off-by-default `--relay-fallback` targets the public down.mptext.top endpoint associated with `wechat-article-exporter`, which its operator shut down on 2026-10-31; no upstream code is included.
 - The YouTube search/filter implementation in `yichen-unified-search` is derived in part from `joeseesun/yt-search-download`; Joe Sun's copyright and the complete MIT license text are preserved above and in the local license copy.
 - The Zhihu CLI-compatible runtime is an external dependency and is not redistributed by this repository; users must verify its provenance, license, and service terms separately.
 - `yichen-mac-wechat-dual-open` references public X/Twitter discussion and implements the copy + bundle-id + ad-hoc signing workflow locally.

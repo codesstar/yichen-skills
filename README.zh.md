@@ -27,10 +27,10 @@
 
 1. 把 Obsidian/Markdown 长文上传为 X Articles 草稿（`yichen-x-article-draft-uploader`）
 2. Mac 微信双开，第二个微信带蓝色图标（`yichen-mac-wechat-dual-open`）
-3. 从微信聊天、朋友圈、收藏夹沉淀 AI 数字资产（`yichen-wechat-local-vault`）
+3. 从 macOS / Windows 微信本地聊天、朋友圈和收藏数据沉淀数字资产（`yichen-wechat-local-vault`）
 4. 抓取已知抖音链接的对标视频（`yichen-content-archive`）
 5. 抓取已知小红书链接的对标笔记（`yichen-content-archive`）
-6. 用火山 ASR 做转写、字幕和口播粗剪（`yichen-volc-asr`）
+6. 用随附的豆包/火山 ASR 后端做字幕和口播粗剪（`yichen-asr`）
 7. 通过 ChatGPT 官网完成可验证调研（`yichen-chatgpt-web-research`）
 8. 安装和维护 Markdown/Obsidian-first 的 Codex 记忆系统（`yichen-agent-memory`）
 9. 批量导出公众号历史文章、原创列表、正文，以及可选阅读量/评论数据（`yichen-wechat-mp-batch-exporter`）
@@ -40,39 +40,12 @@
 13. 把公共网页和平台搜索统一成可核验候选（`yichen-unified-search`）
 14. 只读取、下载和归档已知或已确认链接（`yichen-content-archive`）
 15. 在当轮授权闸门后直接执行私人收藏导出（`yichen-bookmarks-export`）
-16. 在 Step 与豆包/火山 ASR 之间安全路由并避免重复提交（`yichen-asr`）
+16. 在 Step、豆包/火山与免费本地 Whisper 之间按保存的引擎偏好路由转写，并避免重复提交（`yichen-asr`）
 17. 通过企业微信官方 CLI 创建授权文档并管理待办、会议和日程，不操控客户端（`yichen-wecom-operations`）
 18. 把一条公开 X Post 或 Thread 链接转成经过验收的 3:4 图片切片与成片，完整嵌入原生视频并在有源音轨时保留原声（`yichen-x-slicer`）
-19. 在 Windows 本机实验性、只读分析用户明确提供的脱机微信明文快照，不访问进程、不处理密钥、不解密（`yichen-wechat-windows-reader`）
-20. 让 ChatGPT Pro 负责调研、架构和只读审查，Codex 独占本地代码修改和测试（`codex-chatgpt`）
-21. 在匹配版本的 Apple Silicon Mac 上无界面生成、修改剪映原生草稿，并按明确要求导出原生 MP4（`yichen-jianying-edit`；须另行取得私有核心项目）
+19. 让 ChatGPT Pro 负责调研、架构和只读审查，Codex 独占本地代码修改和测试（`codex-chatgpt`）
 
 ## 包含的技能
-
-### `yichen-jianying-edit`
-
-Jianying Headless 私有核心项目的公开 Skill 入口：
-
-- Agent Skill 与草稿生成、编辑和导出核心分开，独立安装时通过 `JIANYING_HEADLESS_ROOT` 定位核心项目。
-- 需要 [mcncarl/jianying-headless](https://github.com/mcncarl/jianying-headless) 的访问权限、单独安装的匹配版剪映，以及固定源码/运行库哈希。
-- 不收录官方库、效果包、账号资料、用户媒体或 ASR 凭据。
-- 默认交付草稿；原生 MP4 是另行明确要求的步骤。
-- 复合片段首页登记仍被阻止，冻结快照导出不等于原生保存持久化通过。
-
-完整说明见 [yichen-jianying-edit/README.md](./yichen-jianying-edit/README.md)。本 Skill 原创部分沿用个人学习和非商业条款，第三方许可证单独保留；公开 Skill 不代表核心项目公开，也没有改变其他目录的许可。
-
-### `yichen-wechat-windows-reader`
-实验性读取用户明确提供且已获授权的脱机 Windows 微信明文 SQLite 快照：
-- 只支持验证器明确识别、合成 fixture 已覆盖的 schema；尚未证明全面兼容真实微信 4.x 数据库
-- 要求静止、已 checkpoint 的快照，manifest 含每快照新生成的随机 UUIDv4 `snapshot_id`，且不存在 WAL/SHM/journal sidecar
-- 以只读方式打开已接受数据库，拒绝不支持的 schema 和不安全文件系统链接，查询已识别的个人或业务消息分片
-- 使用快照级匿名会话 ID，并省略专用内部 username 字段；消息正文与显示文本仍是敏感原文，也可能自然包含身份标识
-- 把所有快照文本视为不可信数据；Agent 不得执行其中指令、打开链接或加载远程资源
-- LocalAppData 只是默认本地导出位置，访问范围取决于继承 ACL；外部输出和覆盖都需当前命令另行确认
-- 绝不访问 `Weixin.exe`、提取密钥、解密数据库、自动发现源数据、控制微信界面或联网
-
-完整说明见 [yichen-wechat-windows-reader/README.md](./yichen-wechat-windows-reader/README.md)。
-
 
 ### `yichen-x-article-draft-uploader`
 把 Obsidian/Markdown 长文上传到 X Articles 草稿：
@@ -100,30 +73,25 @@ Mac 微信双开——无需第三方工具，一条命令搞定：
 
 ### `yichen-wechat-local-vault`
 
-统一 CLI 现已整合实验性的 Windows 明文快照查询，通过 `snapshot --snapshot <目录>` 使用，详见 [快照说明](./yichen-wechat-local-vault/references/windows-snapshot.md)。
-微信数字资产沉淀助手（macOS 专属）：
-- 解密微信 Mac 4.x 本地 SQLCipher 数据库（AES-256-CBC）
-- 提取聊天记录、朋友圈（`sns.db`）和收藏夹（`favorite.db`）
-- 生成群聊解析、朋友圈解析、收藏夹整理、客户跟进和大佬对话复盘草案
-- 首次引导展示三大类九种玩法：聊天记录、朋友圈、收藏夹
-- 可配置监控指定群聊、联系人、朋友圈对象和收藏夹整理偏好
-- 首次使用通过 frida 引导密钥提取
-- 常见触发词：”微信解析”、”微信全量”、”微信增量”、”导出聊天”、”朋友圈解析”、”收藏夹整理”、”客户跟进”、”yichen-wechat-local-vault”
-- 依赖：macOS、微信 Mac 4.x、Python 3.9+、`pycryptodome`、`zstandard`
-- 详细文档见 [yichen-wechat-local-vault/README.md](./yichen-wechat-local-vault/README.md)
+统一的 **macOS / Windows 微信本地全量解析 Skill**。Windows 已实现本机全库采集、认证解密和聊天主表逐行解析；收藏、朋友圈正文解析也已通过共用函数工作流完成真实验收。
+
+- macOS：全量/增量解密，聊天、朋友圈、收藏夹、摘要和漏看/待回复检查
+- Windows 本地全库：`windows capture --scope all --source-id SOURCE_ID` 采集所选账号本地数据目录中的全部数据库，包括收藏、朋友圈、媒体和搜索索引；默认采集范围仍为聊天必需库
+- Windows 聊天查询：`snapshot --snapshot <目录>` 验证、查询、搜索和导出快照。全量解析以源行数、解析行数和文件回读行数核对，单次查询/导出的条数限制另行管理
+- Windows 收藏/朋友圈正文：按 [共用纯函数工作流](./yichen-wechat-local-vault/references/windows-live.md#朋友圈和收藏正文解析)读取已解密快照，现有包内函数已实测可用，暂未单独封装查询子命令
+- 已在 Windows 11 build 26300 ARM64、AMD64 微信 4.1.15.56、CPython 3.12.10 AMD64 环境完成全库采集、聊天全量解析、收藏/朋友圈正文、新消息刷新及导出回读验收
+- 解析范围是电脑已同步的本地数据；三个已知搜索索引校验缺口会明确返回。媒体文件本体还原、普通非管理员执行、其他版本/客户端架构和完整 Mac 工作流对齐仍需继续适配或验证
+- 不操作微信界面；登录和测试消息由用户手动完成，Windows 密钥只驻内存，明文快照写入本地私密目录
+- Mac 依赖：Python 3.9+、`pycryptodome`、`zstandard`；Windows 使用 CPython 3.12 AMD64、系统 CNG 和固定版本的 `zstandard`
+- 详见 [Skill 说明](./yichen-wechat-local-vault/README.md)、[Windows 本地全量解析](./yichen-wechat-local-vault/references/windows-live.md)和[离线快照](./yichen-wechat-local-vault/references/windows-snapshot.md)
 
 ### 已融合进 `yichen-content-archive` 的社交平台抓取器
 原先独立的抖音和小红书抓取器现在只保留一个事实源：
 - `douyin_download.py` 通过 Playwright 拦截读取元数据或下载已知抖音视频
 - `xiaohongshu_fetch.py` 默认匿名读取已知笔记，再按要求下载视频、字幕或图片
 - 旧产物不会被覆盖，目标冲突时自动使用新的 `-run-N` 路径
-- 小红书 Cookie 必须取得当前任务明确授权，可选飞书沉淀也只在用户明确要求时执行
-
-### `yichen-volc-asr`
-本地音视频转写和口播粗剪：
-- 火山 ASR 和 TOS 配置全部通过环境变量读取
-- 输出转写稿、SRT 字幕、ASR 缓存和可选粗剪 MP4
-- 清理临时文件前必须得到用户明确允许
+- 只接受笔记/视频详情链接；下载中断时数据只留在 `.part` 文件并以非零退出码结束，metadata 只保存去掉 `xsec_token` 与签名参数的规范链接
+- 小红书 Cookie 必须取得当前任务明确授权，且只发往 `xiaohongshu.com` 主机；可选飞书沉淀也只在用户明确要求时执行
 
 ### `yichen-chatgpt-web-research`
 通过用户已登录的 ChatGPT 官网账号执行调研的旧版独立入口：
@@ -169,6 +137,7 @@ Mac 微信双开——无需第三方工具，一条命令搞定：
 只读解析、查询和导出 macOS 企业微信 5.x 桌面端数据库：
 - 生成私密、带时间戳的明文快照，绝不写回企业微信容器
 - 支持联系人、会话、聊天记录、搜索与 Markdown/JSON 导出
+- 按 MD5 把消息里的图片、文件、语音、视频对应到客户端本机缓存，并列出仍只有预览图或本地没有的媒体
 - raw key、快照和聊天导出都不进入 Git
 - 不操控原始企业微信，也不发送消息
 
@@ -192,6 +161,7 @@ Mac 微信双开——无需第三方工具，一条命令搞定：
 - 将 AI 最新发现、普通/垂直网页搜索、平台原生发现、显式站点 Map 和原文核验分配给不同后端，不静默互相替代
 - 强制社交平台只读、目标级授权和禁止操控微信 UI
 - 自带可移植、只读的后端体检脚本；检查可选适配器就绪状态时不输出密钥值、不读取凭据文件内容，也不发起付费探针
+- 各后端的参数、限额和登录态规则只在子 Skill 中维护；总入口只保留阶段映射、跨阶段授权门、研究协议和体检
 
 完整家族、可选后端和配置说明见 [yichen-web-research/README.md](./yichen-web-research/README.md)。
 
@@ -205,6 +175,9 @@ Mac 微信双开——无需第三方工具，一条命令搞定：
 - X Quick 对每个查询独立执行；X Research 支持有界的多查询分阶段搜索、确定性去重、来源保留、时间窗检查和最多一轮缺口补搜
 - 内置适配器输出带来源、覆盖范围和限制说明的统一候选；GitHub、微信公众号、小红书、抖音、今日头和 B站的直接 CLI 计划仍是原始输出，除非另行明确提供下游标准化器
 - 浏览器会话复用仅限文档明确列出的有界公开只读路线；私域数据访问和所有写操作均不属于本 Skill
+- 原独立的 AI HOT Skill 已并入 AI HOT 路线：精选、日报与分类条目，`--max-pages` 翻页取全时间窗，并附中文简报格式
+- 自动路由逐条判断查询，进入原生平台前去掉“微博上”这类渠道提示词；原生平台带 `--domain`/`--hybrid` 时直接拒绝，不改走 AnySearch。公众号（搜狗）结果只给会过期的跳转链接，读取正文仍需 mp.weixin.qq.com 文章直链
+- 本版没有 Reddit 原生路线，只能用公共 `site:reddit.com` 网页索引；2026-10-31 核查时 Reddit 对机房出口封锁了其 JSON 接口
 
 完整说明见 [平台覆盖矩阵与路由边界](./yichen-unified-search/README.zh.md)。
 
@@ -231,6 +204,8 @@ Mac 微信双开——无需第三方工具，一条命令搞定：
 
 - 读取并归档已确认的网页、小红书、抖音、公众号、YouTube、B站和小宇宙目标
 - 内置唯一维护的抖音/小红书已知链接抓取器；小红书沉淀飞书仍需用户明确要求
+- 公众号已知文章链接改由本 Skill 自带的 `wechat_known_url.py` 读取：匿名直读公开页、支持图文页，并把正文图片存到本地；原中转站已停服，默认关闭。整号历史、互动数据或评论才使用 `yichen-wechat-mp-batch-exporter`
+- 小宇宙已知单集从官方音频 CDN 匿名下载，再经 `yichen-asr` 转写（默认 StepFun，可选本地 Whisper）；批量 StepFun 须 `--max-transcribe N`，`--download-only` 只下载不转写
 - 搜索与开放式发现不进入归档层
 - 使用不冲突输出目录、续跑检查点和显式覆盖保护
 
@@ -247,10 +222,12 @@ Mac 微信双开——无需第三方工具，一条命令搞定：
 
 ### `yichen-asr`
 
-统一 ASR 路由：
+唯一的转写入口（原 `yichen-volc-asr` 已并入）：
 
-- 纯文本默认走兼容 Step 执行器，时间戳/SRT 默认走 `yichen-volc-asr`
-- App ID 与 Token 只从环境变量读取
+- `transcribe.py` 用 StepFun 或免费本地 Whisper（`mlx-whisper` 或 `openai-whisper`）做纯文本转写；引擎按 `--asr-engine`、已保存的偏好、默认 StepFun 的顺序选择，首次运行会提示选择一次
+- 时间戳与 SRT 默认走 Step 国内站时间戳执行器；Step 被拒且未产生费用（额度或鉴权失败、一个分片都没转成）时，自动路由可在重新提交前改用豆包 2.0
+- 随附豆包/火山执行器，含 SRT 与 ffmpeg 粗剪链；Step 执行器由用户通过 `YICHEN_STEP_ASR_SCRIPT`、`YICHEN_STEP_ASR_TIMESTAMPS_SCRIPT` 自行配置
+- App ID、Token 与 TOS 配置只从环境变量读取；豆包执行器会把工作副本上传到你自己的 TOS 并设为公开读，敏感录音不要走这条路线
 - 已经提交到某服务商的任务不会静默改投另一家
 
 ### `yichen-wecom-operations`
@@ -307,10 +284,6 @@ yichen-skills/
 │  │  └─ wechat_dual_open.py
 │  └─ references/
 │     └─ reliability-and-risks.md
-├─ yichen-volc-asr/
-│  ├─ SKILL.md
-│  └─ scripts/
-│     └─ transcribe.py
 ├─ yichen-chatgpt-web-research/
 │  ├─ SKILL.md
 │  ├─ README.md
@@ -371,6 +344,11 @@ yichen-skills/
 │  ├─ agents/
 │  ├─ references/
 │  ├─ scripts/
+│  │  ├─ transcribe.py
+│  │  ├─ asr_engine.py
+│  │  ├─ route_asr.py
+│  │  ├─ asr_doctor.py
+│  │  └─ backends/volc_asr_transcribe.py
 │  └─ tests/
 ├─ yichen-wecom-operations/
 │  ├─ SKILL.md
@@ -409,11 +387,11 @@ yichen-skills/
 - Python 3.9+
 - 依赖：
   - X 文章草稿：`pip install playwright pycryptodome && python3 -m playwright install chromium`
-  - 微信本地解析：`pip install pycryptodome zstandard`
+  - 微信本地解析：Mac 使用 `pycryptodome zstandard`；Windows 使用系统 CNG 与[固定的 CPython 3.12 AMD64 依赖](./yichen-wechat-local-vault/references/windows-live.md)
   - 微信双开：`pip install Pillow`
   - 内容归档（抖音）：`pip install playwright requests && python3 -m playwright install chromium`
   - 内容归档（小红书）：`pip install requests`
-  - 火山 ASR 粗剪：`pip install requests`，并安装本机 `ffmpeg` / `ffprobe`
+  - ASR（`yichen-asr`）：豆包后端需要 `pip install requests`、本机 `ffmpeg` / `ffprobe` 和你自己的 TOS bucket；本地 Whisper 需要 `uv tool install mlx-whisper`（或 `openai-whisper`）与 `ffmpeg`；Step 执行器需另行安装
   - ChatGPT 官网调研：Chrome 已登录 ChatGPT，且当前 Agent 环境支持 Chrome/Computer Use 能力
   - 公众号批量导出：已知 URL 正文下载只需 Python 3 标准库；历史列表、阅读量和评论需要额外配置 `wechat-article-exporter` / `wxdown-service`
   - 企业微信本地解析：`pycryptodome`；只有明确授权抓取本机 raw key 时才需要 `frida`
@@ -436,7 +414,6 @@ yichen-skills/
 - `yichen-x-article-draft-uploader`
 - `yichen-wechat-local-vault`
 - `yichen-mac-wechat-dual-open`
-- `yichen-volc-asr`
 - `yichen-chatgpt-web-research`
 - `codex-chatgpt`
 - `yichen-agent-memory`
@@ -477,18 +454,17 @@ codex plugin add yichen-grok-consult@yichen-skills
 
 ### D）启用 `yichen-wechat-local-vault`
 
-1. 安装 Python 依赖：`pip3 install pycryptodome zstandard`
-2. 在 Claude Code 或 Codex 中说"微信解析"、"导出聊天"或"收藏夹整理"
-3. 首次运行会引导你完成密钥提取，并从九种玩法里选择当前要启用的工作流
-4. 如果不确定，默认从"聊天记录解析 + 朋友圈解析 + 收藏夹整理"开始
-5. 后续使用自动生成对应的解析报告或草案
-6. 详细说明见 [yichen-wechat-local-vault/README.md](./yichen-wechat-local-vault/README.md)
+1. 先确定来源：Mac 本机 vault、Windows 本机采集，或明确提供的 Windows 脱机明文快照。
+2. Mac 安装 `pycryptodome zstandard`，再提出聊天解析、导出、朋友圈或收藏夹需求，按现有 Mac 流程完成配置与工作流选择。
+3. Windows 使用 CPython 3.12 AMD64，并按 [Windows 本机采集说明](./yichen-wechat-local-vault/references/windows-live.md)安装固定依赖。用户手动登录后，用 `windows discover` 选择已授权来源，全量本地库使用 `windows capture --scope all --source-id SOURCE_ID`；默认 `capture` 只选聊天必需库。
+4. Windows 查询、搜索和导出走 `snapshot`；它本身不刷新数据，依赖最新消息时必须重新采集。
+5. 详见 [Skill 说明](./yichen-wechat-local-vault/README.md)中的平台命令、私密输出路径及已验收的权限和版本范围。
 
 ### E）启用自媒体视频工作流
 
 1. 安装 Playwright、requests 和 ffmpeg
 2. 用 `yichen-content-archive` 保存已知抖音或小红书对标素材
-3. 用 `yichen-volc-asr` 做转写、字幕或口播粗剪
+3. 用 `yichen-asr` 做转写、字幕或口播粗剪
 
 ### F）启用 `yichen-chatgpt-web-research`
 
